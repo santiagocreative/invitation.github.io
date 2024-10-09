@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Códigos con Cupón y Pistas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #fee7ed;
+            margin-top: 50px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        #resultado {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        #chocolatina-emoji {
+            font-size: 50px;
+        }
+
+        .pista-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        .pista-button:hover {
+            background-color: #0056b3;
+        }
+
+        #resultado-pista {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        /* Estilos del cupón */
+        body.cupon-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: auto;
+            margin: 0;
+            flex-direction: column;
+        }
+
+        .coupon-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .coupon {
+            margin-top: 2vh;
+            margin-bottom: 0vh;
+            border: 2px dashed #000;
+            border-radius: 15px;
+            width: 38vh;
+            height: 15vh;
+            background-color: #ff6961;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5em;
+            position: relative;
+        }
+
+        .coupon-interno {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            font-family: Arial, sans-serif;
+            border: 1px solid #ce4a4b;
+            border-radius: 15px;
+            width: 100%;
+            height: 100%;
+        }
+
+        .text {
+            color: #fff;
+            text-align: center;
+            font-size: 2.5vh;
+        }
+
+        .number {
+            font-size: 3vh;
+            writing-mode: vertical-lr;
+            width: 5vh;
+            display: flex;
+            align-content: center;
+            align-items: center;
+        }
+
+        .number.left {
+            left: 10px;
+        }
+
+        .number.right {
+            right: 10px;
+        }
+
+        .divisor-left {
+            border: 1px solid #ce4a4b;
+            height: 100%;
+            margin-right: 20px;
+        }
+
+        .divisor-right {
+            border: 1px solid #ce4a4b;
+            height: 100%;
+            margin-left: 20px;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        .coupon-content {
+            display: none;
+        }
+
+        #state-1:checked~.coupon-wrapper .state-1-content {
+            display: flex;
+        }
+
+        #state-2:checked~.coupon-wrapper .state-2-content {
+            display: flex;
+        }
+
+        .reveal-button {
+            background-color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            color: #ff6961;
+        }
+
+        /* Estilos para los botones "Sí" y "No" */
+        .response-buttons {
+            margin-top: 20px;
+            display: none; /* Ocultar inicialmente */
+        }
+
+        .no-button {
+            background-color: #dc3545;
+            position: relative;
+        }
+
+        @keyframes move {
+            0% {
+                left: 0;
+            }
+
+            100% {
+                left: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Introduce un código de 4 dígitos</h1>
+    <input type="text" id="codigo" maxlength="4" placeholder="Ej. 4576">
+    <br>
+    <button onclick="verificarCodigo()">Verificar Código</button>
+
+    <div id="resultado"></div>
+
+    <!-- Pistas -->
+    <h2>Elige una pista</h2>
+    <button class="pista-button" onclick="mostrarPista(1)">Pista 1</button>
+    <button class="pista-button" onclick="mostrarPista(2)">Pista 2</button>
+    <button class="pista-button" onclick="mostrarPista(3)">Pista 3</button>
+    <div id="resultado-pista"></div>
+
+    <script>
+        function verificarCodigo() {
+            const codigo = document.getElementById('codigo').value;
+            const resultado = document.getElementById('resultado');
+
+            if (codigo === "2901") {
+                resultado.innerHTML = "Ganaste una chocolatina<br><span id='chocolatina-emoji'>🍫</span>";
+            } else if (codigo === "0710") {
+                resultado.innerHTML = "Ganaste un Pingüino<br><span id='brawnie-emoji'>🍪🤎</span>";
+            } else if (codigo === "3110") {
+                // Cambiar la estructura de la página para mostrar el cupón y centrarlo
+                document.body.className = "cupon-page";
+                document.body.innerHTML = `
+                    <input type="radio" name="state" id="state-1" checked>
+                    <input type="radio" name="state" id="state-2">
+                    <div class="coupon-wrapper">
+                        <div class="coupon coupon-content state-1-content">
+                            <label for="state-2" class="reveal-button" id="reveal-button">Desvelar</label>
+                        </div>
+                        <div class="coupon coupon-content state-2-content">
+                            <div class="coupon-interno">
+                                <div class="number">7785483</div>
+                                <div class="divisor-left"></div>
+                                <div class="text">Cupón válido para una noche especial 🌃</div>
+                                <div class="divisor-right"></div>
+                                <div class="number">7785483</div>
+                            </div>
+                        </div>
+                        <div class="response-buttons" id="response-buttons">
+                            <button id="si-button" onclick="redirigir()">Sí</button>
+                            <button id="no-button" class="no-button">No</button>
+                        </div>
+                    </div>
+                `;
+
+                // Añadir evento para mostrar los botones de respuesta después de desvelar el cupón
+                document.getElementById('reveal-button').onclick = function () {
+                    document.getElementById('response-buttons').style.display = 'block';
+                }
+
+                // Botón No que se mueve aleatoriamente
+                const btnNo = document.getElementById('no-button');
+                btnNo.addEventListener('mouseover', () => {
+                    const x = Math.floor(Math.random() * 100) + 50;
+                    const y = Math.floor(Math.random() * 200) + 50;
+                    btnNo.style.transform = `translate(${x}px, ${y}px)`;
+                });
+            } else {
+                resultado.innerHTML = "Código incorrecto. Intenta de nuevo.";
+            }
+        }
+
+        function mostrarPista(numPista) {
+            const resultadoPista = document.getElementById('resultado-pista');
+            let mensaje = '';
+
+            switch (numPista) {
+                case 1:
+                    mensaje = "Siempre estoy al borde, esperando mi turno para brindar en compañía. ¿Dónde me encuentro?";
+                    break;
+                case 2:
+                    mensaje = "Una suave compañera que nunca maúlla, pero su corazón de peluche guarda secretos importantes.";
+                    break;
+                case 3:
+                    mensaje = "Siempre iluminando tus momentos, pero mi parte trasera no es tan visible. Busca más allá de lo que ves.";
+                    break;
+                default:
+                    mensaje = "Elige una pista válida.";
+            }
+
+            resultadoPista.innerHTML = `<p>${mensaje}</p>`;
+        }
+
+        function redirigir() {
+            // Redirigir a la página de la cita
+            window.location.href = "https://api.whatsapp.com/send?text=¡Acepto+la+salida+para+el+Viernes+11+de+octubre+a+las+8+pm!&phone=+573203781072"; // Cambia esto a la URL de tu página de cita; // Cambia esto a la URL de tu página de cita
+        }
+    </script>
+</body>
+
+</html>
